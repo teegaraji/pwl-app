@@ -12,6 +12,8 @@ class Tutorial extends Model
     protected $fillable = [
         'title',
         'course_code',
+        'kode_matkul', // Tambahkan ini
+        'nama_matkul', // Tambahkan ini
         'url_presentation',
         'url_finished',
         'creator_email',

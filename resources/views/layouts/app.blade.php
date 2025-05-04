@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -13,12 +13,21 @@
 
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- js --}}
+    <script src="{{ asset('js/darkmode.js') }}"></script>
 </head>
 
-<body class=" text-gray-100 bg-gray-900 flex justify-center ">
-    <div class="container mx-80 ">
+<body class="text-secondary bg-primary flex justify-center">
+
+    @include('layouts.partials.header')
+
+    <div class="container mx-60 mt-65 sm:mt-35 lg:mt-25">
         @yield('content')
     </div>
+
+
+    @stack('scripts')
 </body>
 
 </html>

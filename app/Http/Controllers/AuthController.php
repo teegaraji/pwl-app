@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -28,7 +29,7 @@ class AuthController extends Controller
             $token = $response->json('refreshToken');
 
             // Simpan token dan email ke session
-            session(['refreshToken' => $token]);
+            session(['refreshToken' => $response->json()['refreshToken']]);
             session(['user_email' => $request->email]);
 
             return redirect()->route('tutorials.index');
@@ -39,17 +40,18 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $token = session('refreshToken');
+        // Tetap coba panggil server logout, tapi jangan blok proses meski gagal
+        $response = Http::post('https://jwt-auth-eight-neon.vercel.app/logout', [
+            'refresh_token' => session('refreshToken'),
+        ]);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token
-        ])->get('https://jwt-auth-eight-neon.vercel.app/logout');
-
-        if ($response->successful()) {
-            session()->flush(); // hapus semua session
-            return redirect()->route('login.form')->with('success', 'Logout berhasil');
+        // Optional log if needed
+        if (!$response->successful()) {
+            logger()->warning('Logout API gagal', ['body' => $response->body()]);
         }
 
-        return back()->with('error', 'Logout gagal');
+        // Tetap flush session lokal
+        session()->flush();
+        return redirect()->route('login.form')->with('success', 'Logout berhasil');
     }
 }
