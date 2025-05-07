@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="10">
 
     <title>{{ $tutorial->title }}</title>
 
@@ -17,6 +17,10 @@
 
     {{-- js --}}
     <script src="{{ asset('js/darkmode.js') }}"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 </head>
 
 <body class="text-secondary bg-primary flex justify-center">
@@ -44,7 +48,9 @@
                 @endif
 
                 @if ($detail->code)
-                    <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto"><code>{{ $detail->code }}</code></pre>
+                    <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+                        <code class="language-javascript">{!! htmlspecialchars($detail->code) !!}</code>
+                    </pre>
                 @endif
 
                 @if ($detail->url)
